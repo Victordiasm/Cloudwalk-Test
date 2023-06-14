@@ -1,7 +1,29 @@
 import os, traceback, logging, time, re, json
 from pathlib import Path
 
+# Class of the Quake Log file
+# Input: String with path to file.
+# Attributes: raw_log, log_list, match_list
+# Methods: find_matches()
+class quake_log_file():
+    def __init__(self, file):
+        logging.info("Initializing read of file {}".format(file))
+        with open(file, "r", encoding="utf-8") as log_file: # Open log file.
+            game_log = log_file.read()
+            log_list = game_log.split("\n")
+        self.raw_log = game_log     # Raw Log for occasional future use
+        self.log_list = log_list    # raw log split by lines in a list for occasional future use
+        self.match_list = []        # Empty list to be filled with matches
 
+
+# Class of the quake match
+# Input: match_log_list.
+# attributes: 
+# Methods:
+class quake_match():
+    def __init__(self, match_log, match_n, **kwargs):
+        self.match_n = match_n
+        self.match_log = match_log
 
 def main():
     path_cwd = Path(os.getcwd())    # Get current directory
