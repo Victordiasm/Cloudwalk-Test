@@ -29,5 +29,5 @@ if __name__ == "__main__":
     if len(sys.argv) == 2:
         main()
     else:
-        print("report.py uses an argument of the log path. Please include one.")
+        print("report.py uses an argument of the log path. Please include one. Example: py report.py .\db\qgames.log")
     
