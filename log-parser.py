@@ -14,7 +14,28 @@ class quake_log_file():
         self.raw_log = game_log     # Raw Log for occasional future use
         self.log_list = log_list    # raw log split by lines in a list for occasional future use
         self.match_list = []        # Empty list to be filled with matches
-
+    # This funcion scans through the lines of the log in search of the message InitGame and ShutdownGame to separete matches.
+    def find_matches(self):
+        init_game_regex = re.compile(r".*InitGame:.*")           # Regex to match the initiation of a game
+        shutdown_game_regex = re.compile(r".*ShutdownGame:.*")   # Regex to match the shutdown of a game
+        init_recording = False
+        i = 1
+        logging.info("Initializing find_matches from quake_log_file class")
+        for line in self.log_list:                  # Scans the log for the InitGame and ShutdownGame lines for recording the matches
+            if re.search(init_game_regex, line):
+                if not init_recording:
+                    init_recording = True
+                    match_record = []               # Resets the match record for first/another recording
+                elif init_recording:                # In case the game starts without shutdown the last game
+                    self.match_list.append(quake_match(match_record, i))    # appends the recorded match to the match list with the match number
+                    i += 1
+                    match_record = []
+            elif re.search(shutdown_game_regex, line):
+                init_recording = False
+                self.match_list.append(quake_match(match_record, i))
+                i += 1
+            elif init_recording:
+                match_record.append(line)
 
 # Class of the quake match
 # Input: match_log_list.
