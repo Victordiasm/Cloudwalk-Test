@@ -49,7 +49,8 @@ class quake_match():
         self.players = []           # Match players list
         self.kills = {}             # Kill dict for players
         self.kills_by_means = {}    # Kill means for tracking
-        self.analyze_match()        
+        self.analyze_match()
+        self.kills = dict(sorted(self.kills.items(), key=lambda x:x[1], reverse=True))        
         self.match_dict = {"total_kills":self.total_kills, "players":self.players, "kills":self.kills, "kills_by_mean":self.kills_by_means} # Dict with all data required
         self.match_json = json.dumps(self.match_dict, indent=1) # Json of the match dict
     # This function analyses the data looking for kills
