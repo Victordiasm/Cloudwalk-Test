@@ -4,7 +4,7 @@ from pathlib import Path
 # Class of the Quake Log file
 # Input: String with path to file.
 # Attributes: raw_log, log_list, match_list
-# Methods: find_matches()
+# Methods: find_matches(), rank_players()
 class quake_log_file():
     def __init__(self, file):
         logging.info("Initializing read of file {}".format(file))
@@ -36,6 +36,18 @@ class quake_log_file():
                 i += 1
             elif init_recording:
                 match_record.append(line)
+    # Function for ranking all players in the game
+    def rank_players(self):
+        player_dict = {}
+        for match in self.match_list:
+            for player in match.kills:
+                try:
+                    player_dict[player] += match.kills[player]
+                except:
+                    player_dict[player] = match.kills[player]
+        self.log_ranking = dict(sorted(player_dict.items(), key=lambda x:x[1], reverse=True))
+        self.log_ranking_json = json.dumps(self.log_ranking, indent=1) # Json of the match dict
+
 
 # Class of the quake match
 # Input: match_log_list, match_number.
