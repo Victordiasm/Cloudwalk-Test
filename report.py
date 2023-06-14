@@ -19,13 +19,14 @@ def main():
         logging.error(traceback.format_exc())
     quake_game = log_parser.quake_log_file(sys.argv[1])
     quake_game.find_matches()
+    quake_game.rank_players()
     for match in quake_game.match_list:
         print("game_{}:".format(match.match_n), match.match_json)
-        print("-----------------")
+    print("-----------------")
+    print(quake_game.log_ranking_json)
 
 if __name__ == "__main__":
     if len(sys.argv) == 2:
-        print(sys.argv[1])
         main()
     else:
         print("report.py uses an argument of the log path. Please include one.")
