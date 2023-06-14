@@ -14,3 +14,7 @@ Quality Engineering test for Cloudwalker.
 
  -Report.py
     - Takes the path of the log file as argument.
+    Example:
+    ```
+     py report.py .\db\qgames.log
+    ```
