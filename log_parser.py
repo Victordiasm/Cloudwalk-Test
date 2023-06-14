@@ -38,13 +38,40 @@ class quake_log_file():
                 match_record.append(line)
 
 # Class of the quake match
-# Input: match_log_list.
-# attributes: 
+# Input: match_log_list, match_number.
+# attributes: match_n, match_log, total_kills, players, kills, match_dict, match_json
 # Methods:
 class quake_match():
     def __init__(self, match_log, match_n, **kwargs):
-        self.match_n = match_n
-        self.match_log = match_log
+        self.match_n = match_n      # Match number for tracking
+        self.match_log = match_log  # Match_log
+        self.total_kills = 0        # Total kills in the match
+        self.players = []           # Match players list
+        self.kills = {}             # Kill dict for players
+        self.kills_by_means = {}    # Kill means for tracking
+        self.analyze_match()        
+        self.match_dict = {"total_kills":self.total_kills, "players":self.players, "kills":self.kills, "kills_by_mean":self.kills_by_means} # Dict with all data required
+        self.match_json = json.dumps(self.match_dict, indent=1) # Json of the match dict
+    # This function analyses the data looking for kills
+    def analyze_match(self):
+        logging.info("Initializing analyze_match from quake_match class")
+        player_regex = re.compile(r'.*ClientUserinfoChanged: [0-9]+ n\\(.*?)\\t.*')           # Regex for identifying players names
+        kill_regex = re.compile(r".+Kill: [0-9]+ [0-9]+ [0-9]+: (.*) killed (.*) by .+")    # Regex for identifying kills
+        for line in self.match_log:                             # Search the log for the player name and kill message
+            if re.search(player_regex, line) != None:           # True if initing game
+                regex_match = re.search(player_regex, line)
+                player_name = regex_match.group(1)              
+                if player_name not in self.players: # Introduct the player name in the class
+                    self.players.append(player_name)
+                    if player_name not in self.kills: self.kills[player_name] = 0 
+            elif re.search(kill_regex, line) != None:
+                self.total_kills += 1
+                regex_match = re.search(kill_regex, line)
+                player_kill = regex_match.group(1)      # Player who killed
+                player_killed = regex_match.group(2)    # Player who got killed
+                if player_kill == "<world>": self.kills[player_killed] += -1 # In case the player got killed by the world
+                else: 
+                    self.kills[player_kill] += 1
 
 def main():
     path_cwd = Path(os.getcwd())    # Get current directory
@@ -64,4 +91,5 @@ def main():
         logging.error(traceback.format_exc())
 
 if __name__ == "__main__":
+    
     main()
