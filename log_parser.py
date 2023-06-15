@@ -69,7 +69,7 @@ class quake_match():
     def analyze_match(self):
         logging.info("Initializing analyze_match from quake_match class")
         player_regex = re.compile(r'.*ClientUserinfoChanged: [0-9]+ n\\(.*?)\\t.*')           # Regex for identifying players names
-        kill_regex = re.compile(r".+Kill: [0-9]+ [0-9]+ [0-9]+: (.*) killed (.*) by .+")    # Regex for identifying kills
+        kill_regex = re.compile(r".+Kill: [0-9]+ [0-9]+ [0-9]+: (.*) killed (.*) by (.+)")    # Regex for identifying kills
         for line in self.match_log:                             # Search the log for the player name and kill message
             if re.search(player_regex, line) != None:           # True if initing game
                 regex_match = re.search(player_regex, line)
@@ -82,9 +82,12 @@ class quake_match():
                 regex_match = re.search(kill_regex, line)
                 player_kill = regex_match.group(1)      # Player who killed
                 player_killed = regex_match.group(2)    # Player who got killed
+                kill_mean = regex_match.group(3)        # Kill mean
                 if player_kill == "<world>": self.kills[player_killed] += -1 # In case the player got killed by the world
                 else: 
                     self.kills[player_kill] += 1
+                if kill_mean not in self.kills_by_means: self.kills_by_means[kill_mean] = 1
+                else: self.kills_by_means[kill_mean] += 1
 
 def main():
     path_cwd = Path(os.getcwd())    # Get current directory
