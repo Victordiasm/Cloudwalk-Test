@@ -2,7 +2,10 @@
 
 ## 1. Introduction
 
-Quality Engineering test for Cloudwalker.
+Quality Engineering test for Cloudwalk. 
+
+Consists of parsing the log of a quake match and finding kills and players, also creating a ranking and a list of the mean of kill.
+
 
 ## 2. Choiches in the project
 
