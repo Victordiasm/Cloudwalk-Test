@@ -12,7 +12,7 @@ def main():
     except OSError: # In case there's no folder on working directory
         os.mkdir(path_log)
         logging.basicConfig(filename=path_log/"{}.log".format(current_time), encoding="utf-8", level=logging.INFO, filemode="w", format="%(asctime)s %(message)s")
-        logging.info("Initing log-parser")
+        logging.info("Initing report script ")
         logging.info("Log folder not present, creating one".format(path_log/"{}.log".format(current_time)))
         logging.error(traceback.format_exc())   # Writes python except on log file.
     except:
