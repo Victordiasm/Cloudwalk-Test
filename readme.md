@@ -4,7 +4,7 @@
 
 Quality Engineering test for Cloudwalk. 
 
-Consists of parsing the log of a quake match and finding kills and players, also creating a ranking and a list of the mean of kill.
+Consists of parsing the log of a quake match and finding kills, players, creating a ranking and a list of the kill means. 
 
 
 ## 2. Choiches in the project
